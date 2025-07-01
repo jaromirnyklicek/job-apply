@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Recruitis Jobs{% endblock %}</title>
+
+    {% for css in vite_asset_css('app.js') %}
+        <link rel="stylesheet" href="{{ css }}">
+    {% endfor %}
+</head>
+<body>
+
+<div id="app"></div>
+
+<script type="module" src="{{ vite_asset('app.js') }}"></script>
+
+</body>
+</html>

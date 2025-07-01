@@ -29,3 +29,6 @@ services:
     App\Infrastructure\Recruitis\RecruitisApiClient:
         arguments:
             $token: '%env(RECRUITIS_API_TOKEN)%'
+
+    App\Infrastructure\Twig\ViteAssetExtension:
+        tags: [ 'twig.extension' ]
