@@ -1,11 +1,12 @@
 services:
-    app:
-        image: webdevops/php-apache:8.3
-        container_name: recruitis-app
-        ports:
-            - "3030:80"
+    apache.recruitis:
+        build:
+            context: .
+            dockerfile: Dockerfile
         volumes:
             - .:/app
+        ports:
+            - "3030:80"
         environment:
             - WEB_DOCUMENT_ROOT=/app/public
             - PHP_DISPLAY_ERRORS=1
