@@ -16,6 +16,8 @@ services:
 
     App\:
         resource: '../src/'
+        autowire: true
+        autoconfigure: true
         exclude:
             - '../src/Kernel.php'
 
@@ -32,3 +34,5 @@ services:
 
     App\Infrastructure\Twig\ViteAssetExtension:
         tags: [ 'twig.extension' ]
+
+    Symfony\Contracts\Cache\CacheInterface: '@cache.app'
