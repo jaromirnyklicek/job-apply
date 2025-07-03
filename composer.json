@@ -58,7 +58,8 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ]
+        ],
+        "test": "vendor/bin/codecept run Unit"
     },
     "conflict": {
         "symfony/symfony": "*"
@@ -68,5 +69,9 @@
             "allow-contrib": false,
             "require": "7.3.*"
         }
+    },
+    "require-dev": {
+        "codeception/codeception": "^5.3",
+        "codeception/module-asserts": "^3.2"
     }
 }

@@ -3,9 +3,13 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Recruitis;
 
+use RuntimeException;
+use App\Domain\Recruitis\DTO\JobDto;
+use App\Domain\Recruitis\DTO\AnswerRequestDto;
+use App\Domain\Recruitis\RecruitisApiClientInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class RecruitisApiClient
+class RecruitisApiClient implements RecruitisApiClientInterface
 {
     private const API_BASE_URL = 'https://app.recruitis.io/api2';
 
@@ -24,10 +28,12 @@ class RecruitisApiClient
             'headers' => $this->authHeaders(),
         ]);
 
-        return $response->toArray()['payload'] ?? [];
+        $payload = $response->toArray()['payload'] ?? [];
+
+        return array_map(fn(array $job) => JobDto::fromArray($job), $payload);
     }
 
-    public function fetchJobDetail(string $id): array
+    public function fetchJobDetail(string $id): JobDto
     {
         $url = sprintf('%s/jobs/%s', self::API_BASE_URL, $id);
 
@@ -36,42 +42,20 @@ class RecruitisApiClient
         ]);
 
         if (200 !== $response->getStatusCode()) {
-            throw new \RuntimeException('Detail not found.');
+            throw new RuntimeException('Detail not found.');
         }
 
-        return $response->toArray()['payload'] ?? [];
+        $payload = $response->toArray()['payload'] ?? [];
+        if ($payload === []) {
+            throw new RuntimeException('Server returned empty payload.');
+        }
+
+        return JobDto::fromArray($payload);
     }
 
-    public function postJobAnswer(
-        int $jobId,
-        string $name,
-        string $email,
-        string $phone,
-        string $linkedin,
-        string $coverLetter,
-        int $salary
-    ): array {
-        $payload = [
-            'job_id' => $jobId,
-            'name' => $name,
-            'email' => $email,
-            'phone' => $phone,
-            'cover_letter' => $coverLetter,
-        ];
-
-        if($linkedin !== '') {
-            $payload['linkedin'] = $linkedin;
-        }
-
-        if ($salary > 0) {
-            $payload['salary'] = [
-                'amount' => $salary,
-                'currency' => 'CZK',
-                'unit' => 'month',
-                'type' => 0,
-                'note' => '',
-            ];
-        }
+    public function postAnswer(AnswerRequestDto $dto): array
+    {
+        $payload = $dto->toArray();
 
         $response = $this->httpClient->request(
             'POST',

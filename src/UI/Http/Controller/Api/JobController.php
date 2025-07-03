@@ -5,6 +5,7 @@ namespace App\UI\Http\Controller\Api;
 
 use App\Application\Job\FetchJobDetailUseCase;
 use App\Application\Job\FetchJobsUseCase;
+use App\Domain\Model\Job\Job;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,7 +17,7 @@ final class JobController
     {
         $jobs = $useCase->execute();
 
-        $data = array_map(fn($job) => [
+        $data = array_map(fn(Job $job) => [
             'id' => $job->id,
             'title' => $job->title,
             'description' => nl2br($job->description),

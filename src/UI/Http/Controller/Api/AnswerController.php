@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace App\UI\Http\Controller\Api;
 
-use App\Infrastructure\Recruitis\RecruitisApiClient;
+use App\Application\Answer\SubmitAnswerUseCase;
+use App\Domain\Recruitis\DTO\AnswerRequestDto;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -11,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class AnswerController
 {
-    public function __construct(private RecruitisApiClient $client)
+    public function __construct(private readonly SubmitAnswerUseCase $submitAnswerUseCase)
     {
     }
 
@@ -27,16 +28,18 @@ final class AnswerController
             }
         }
 
+        $dto = new AnswerRequestDto(
+            jobId: (string)$data['job_id'],
+            name: (string)$data['name'],
+            email: (string)$data['email'],
+            phone: (string)$data['phone'],
+            coverLetter: (string)$data['coverLetter'],
+            linkedin: (string)($data['linkedin'] ?? ''),
+            salary: (int)($data['salary'] ?? 0)
+        );
+
         try {
-            $result = $this->client->postJobAnswer(
-                jobId: (int)$data['job_id'],
-                name: (string)$data['name'],
-                email: (string)$data['email'],
-                phone: (string)$data['phone'],
-                linkedin: (string)($data['linkedin'] ?? ''),
-                coverLetter: (string)$data['coverLetter'],
-                salary: (int)($data['salary'] ?? 0)
-            );
+            $result = $this->submitAnswerUseCase->execute($dto);
 
             return new JsonResponse($result['body'], $result['status']);
 

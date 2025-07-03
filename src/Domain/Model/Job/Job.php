@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Domain\Job;
+namespace App\Domain\Model\Job;
 
 class Job
 {

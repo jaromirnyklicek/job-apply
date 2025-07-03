@@ -1,0 +1,17 @@
+[
+    {
+        "job_id": "abc123",
+        "title": "PHP Developer",
+        "description": "Backend stuff"
+    },
+    {
+        "job_id": "def456",
+        "title": "Vue Developer",
+        "description": "Frontend stuff"
+    },
+    {
+        "job_id": "43521",
+        "title": "Fullstack dev",
+        "description": "Fullstack stuff"
+    }
+]

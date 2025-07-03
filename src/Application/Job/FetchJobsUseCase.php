@@ -3,30 +3,26 @@ declare(strict_types=1);
 
 namespace App\Application\Job;
 
-use App\Domain\Job\Job;
-use App\Infrastructure\Recruitis\RecruitisApiClient;
+use App\Domain\Model\Job\Job;
+use App\Domain\Recruitis\DTO\JobDto;
+use App\Domain\Recruitis\RecruitisApiClientInterface;
 
 class FetchJobsUseCase
 {
-    private RecruitisApiClient $apiClient;
-
-    public function __construct(RecruitisApiClient $apiClient)
+    public function __construct(private readonly RecruitisApiClientInterface $apiClient)
     {
-        $this->apiClient = $apiClient;
     }
 
-    /**
-     * @return Job[]
-     */
+    /** @return Job[] */
     public function execute(): array
     {
         $rawJobs = $this->apiClient->fetchJobs();
 
-        return array_map(function (array $item): Job {
+        return array_map(function (JobDto $dto): Job {
             return new Job(
-                id: (int)$item['job_id'],
-                title: $item['title'] ?? '',
-                description: $item['description'] ?? ''
+                id: (int)$dto->jobId,
+                title: $dto->title,
+                description: $dto->description
             );
         }, $rawJobs);
     }

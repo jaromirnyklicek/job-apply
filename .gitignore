@@ -13,3 +13,8 @@
 /node_modules
 /public/build/.vite
 /public/build/assets
+
+###> phpunit/phpunit ###
+/phpunit.xml
+/.phpunit.cache/
+###< phpunit/phpunit ###
