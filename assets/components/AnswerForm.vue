@@ -53,7 +53,7 @@
 </template>
 
 <script setup>
-import { useForm, Field, ErrorMessage, Form } from 'vee-validate'
+import { Field, ErrorMessage, Form } from 'vee-validate'
 import * as yup from 'yup'
 import { useRoute } from 'vue-router'
 import { ref } from 'vue'
@@ -74,7 +74,6 @@ const submitting = ref(false)
 const status = ref({ message: '', success: false })
 
 const onSubmit = async (values) => {
-    console.log(values)
     submitting.value = true
     status.value = { message: '', success: false }
 
@@ -103,6 +102,7 @@ const onSubmit = async (values) => {
             }
         }
     } catch (e) {
+        console.error(e)
         status.value = {
             message: 'Nepodařilo se odeslat odpověď.',
             success: false,
