@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\UI\Http\Controller\Api;
@@ -17,7 +18,7 @@ final class JobController
     {
         $jobs = $useCase->execute();
 
-        $data = array_map(fn(Job $job) => [
+        $data = array_map(fn (Job $job) => [
             'id' => $job->id,
             'title' => $job->title,
             'description' => nl2br($job->description),
@@ -31,6 +32,7 @@ final class JobController
     {
         try {
             $job = $useCase->execute($id);
+
             return new JsonResponse([
                 'id' => $job->id,
                 'title' => $job->title,

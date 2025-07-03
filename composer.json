@@ -61,7 +61,7 @@
         ],
         "test": "vendor/bin/codecept run Unit",
         "cs:check": "php-cs-fixer fix --dry-run --allow-risky=yes --diff",
-        "cs:fix": "php-cs-fixer fix"
+        "cs:fix": "php-cs-fixer fix --allow-risky=yes"
     },
     "conflict": {
         "symfony/symfony": "*"

@@ -16,7 +16,7 @@ final class FakeCacheFactory
         return new class implements CacheInterface {
             private array $storage = [];
 
-            public function get(string $key, callable $callback, float $beta = null, array &$metadata = null): mixed
+            public function get(string $key, callable $callback, ?float $beta = null, ?array &$metadata = null): mixed
             {
                 if (array_key_exists($key, $this->storage)) {
                     return $this->storage[$key];

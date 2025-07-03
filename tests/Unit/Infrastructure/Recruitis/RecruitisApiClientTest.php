@@ -1,12 +1,13 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Tests\Unit\Infrastructure\Recruitis;
 
-use Symfony\Component\HttpClient\MockHttpClient;
-use Symfony\Component\HttpClient\Response\MockResponse;
 use App\Infrastructure\Recruitis\RecruitisApiClient;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\MockResponse;
 
 final class RecruitisApiClientTest extends TestCase
 {
@@ -17,7 +18,7 @@ final class RecruitisApiClientTest extends TestCase
 
         // sometimes mocking isn't that bad ;)
         $response = new MockResponse(json_encode([
-            'payload' => $jobs
+            'payload' => $jobs,
         ]));
 
         $client = new MockHttpClient($response);

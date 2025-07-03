@@ -7,7 +7,6 @@ namespace App\Tests\Support\Helper;
 use App\Domain\Recruitis\DTO\AnswerRequestDto;
 use App\Domain\Recruitis\DTO\JobDto;
 use App\Domain\Recruitis\RecruitisApiClientInterface;
-use RuntimeException;
 
 final class FakeRecruitisApiClientFactory
 {
@@ -16,7 +15,7 @@ final class FakeRecruitisApiClientFactory
         $path = codecept_data_dir('jobs.json');
         $data = json_decode(file_get_contents($path), true);
 
-        $jobDtos = array_map(fn($item) => new JobDto($item['job_id'], $item['title'], $item['description']), $data);
+        $jobDtos = array_map(fn ($item) => new JobDto($item['job_id'], $item['title'], $item['description']), $data);
 
         return new class($jobDtos) implements RecruitisApiClientInterface {
             /**
@@ -38,12 +37,12 @@ final class FakeRecruitisApiClientFactory
                         return $job;
                     }
                 }
-                throw new RuntimeException('Detail not found');
+                throw new \RuntimeException('Detail not found');
             }
 
             public function postAnswer(AnswerRequestDto $dto): array
             {
-                throw new RuntimeException('Not implemented in test');
+                throw new \RuntimeException('Not implemented in test');
             }
         };
     }

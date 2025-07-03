@@ -17,12 +17,13 @@ final class FetchJobDetailUseCase
 
     public function execute(string $id): Job
     {
-        return $this->cache->get('recruitis_job_' . $id, function (ItemInterface $item) use ($id): Job {
+        return $this->cache->get('recruitis_job_'.$id, function (ItemInterface $item) use ($id): Job {
             $item->expiresAfter(15 * 60);
 
             $dto = $this->apiClient->fetchJobDetail($id);
+
             return new Job(
-                id: (int)$dto->jobId,
+                id: (int) $dto->jobId,
                 title: $dto->title,
                 description: $dto->description
             );

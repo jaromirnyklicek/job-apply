@@ -1,11 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Infrastructure\Recruitis;
 
-use RuntimeException;
-use App\Domain\Recruitis\DTO\JobDto;
 use App\Domain\Recruitis\DTO\AnswerRequestDto;
+use App\Domain\Recruitis\DTO\JobDto;
 use App\Domain\Recruitis\RecruitisApiClientInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -30,7 +30,7 @@ class RecruitisApiClient implements RecruitisApiClientInterface
 
         $payload = $response->toArray()['payload'] ?? [];
 
-        return array_map(fn(array $job) => JobDto::fromArray($job), $payload);
+        return array_map(fn (array $job) => JobDto::fromArray($job), $payload);
     }
 
     public function fetchJobDetail(string $id): JobDto
@@ -42,12 +42,12 @@ class RecruitisApiClient implements RecruitisApiClientInterface
         ]);
 
         if (200 !== $response->getStatusCode()) {
-            throw new RuntimeException('Detail not found.');
+            throw new \RuntimeException('Detail not found.');
         }
 
         $payload = $response->toArray()['payload'] ?? [];
-        if ($payload === []) {
-            throw new RuntimeException('Server returned empty payload.');
+        if ([] === $payload) {
+            throw new \RuntimeException('Server returned empty payload.');
         }
 
         return JobDto::fromArray($payload);
@@ -59,7 +59,7 @@ class RecruitisApiClient implements RecruitisApiClientInterface
 
         $response = $this->httpClient->request(
             'POST',
-            "https://app.recruitis.io/api2/answers",
+            sprintf('%s/answers', self::API_BASE_URL),
             [
                 'headers' => $this->authHeaders(),
                 'json' => $payload,
@@ -75,7 +75,7 @@ class RecruitisApiClient implements RecruitisApiClientInterface
     private function authHeaders(): array
     {
         return [
-            'Authorization' => 'Bearer ' . $this->token,
+            'Authorization' => 'Bearer '.$this->token,
         ];
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\UI\Http\Controller\Api;
@@ -7,8 +8,8 @@ use App\Application\Answer\SubmitAnswerUseCase;
 use App\Domain\Recruitis\DTO\AnswerRequestDto;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 final class AnswerController
 {
@@ -29,20 +30,19 @@ final class AnswerController
         }
 
         $dto = new AnswerRequestDto(
-            jobId: (string)$data['job_id'],
-            name: (string)$data['name'],
-            email: (string)$data['email'],
-            phone: (string)$data['phone'],
-            coverLetter: (string)$data['coverLetter'],
-            linkedin: (string)($data['linkedin'] ?? ''),
-            salary: (int)($data['salary'] ?? 0)
+            jobId: (string) $data['job_id'],
+            name: (string) $data['name'],
+            email: (string) $data['email'],
+            phone: (string) $data['phone'],
+            coverLetter: (string) $data['coverLetter'],
+            linkedin: (string) ($data['linkedin'] ?? ''),
+            salary: (int) ($data['salary'] ?? 0)
         );
 
         try {
             $result = $this->submitAnswerUseCase->execute($dto);
 
             return new JsonResponse($result['body'], $result['status']);
-
         } catch (\Throwable $e) {
             return new JsonResponse(['error' => $e->getMessage()], 500);
         }

@@ -10,8 +10,9 @@ use App\Domain\Recruitis\RecruitisApiClientInterface;
 final class SubmitAnswerUseCase
 {
     public function __construct(
-        private readonly RecruitisApiClientInterface $client
-    ) {}
+        private readonly RecruitisApiClientInterface $client,
+    ) {
+    }
 
     public function execute(AnswerRequestDto $dto): array
     {

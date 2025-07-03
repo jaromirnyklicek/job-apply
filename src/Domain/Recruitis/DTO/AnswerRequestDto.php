@@ -27,7 +27,7 @@ final class AnswerRequestDto
             'cover_letter' => $this->coverLetter,
         ];
 
-        if ($this->linkedin !== '') {
+        if ('' !== $this->linkedin) {
             $data['linkedin'] = $this->linkedin;
         }
 

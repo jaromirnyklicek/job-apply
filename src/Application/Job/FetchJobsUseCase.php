@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Application\Job;
@@ -24,7 +25,7 @@ class FetchJobsUseCase
             return array_map(
                 function (JobDto $dto): Job {
                     return new Job(
-                        id: (int)$dto->jobId,
+                        id: (int) $dto->jobId,
                         title: $dto->title,
                         description: $dto->description
                     );

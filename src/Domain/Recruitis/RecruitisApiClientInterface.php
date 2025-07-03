@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domain\Recruitis;
 
-use App\Domain\Recruitis\DTO\JobDto;
 use App\Domain\Recruitis\DTO\AnswerRequestDto;
-use RuntimeException;
+use App\Domain\Recruitis\DTO\JobDto;
 
 interface RecruitisApiClientInterface
 {
@@ -16,13 +15,14 @@ interface RecruitisApiClientInterface
     public function fetchJobs(): array;
 
     /**
-     * @throws RuntimeException
+     * @throws \RuntimeException
      */
     public function fetchJobDetail(string $id): JobDto;
 
     /**
      * @return array raw API response
-     * @throws RuntimeException
+     *
+     * @throws \RuntimeException
      */
     public function postAnswer(AnswerRequestDto $dto): array;
 }
