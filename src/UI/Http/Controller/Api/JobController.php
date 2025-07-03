@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class JobController
+final class JobController
 {
     #[Route('/api/jobs', name: 'api_jobs_list', methods: ['GET'])]
     public function list(FetchJobsUseCase $useCase): JsonResponse

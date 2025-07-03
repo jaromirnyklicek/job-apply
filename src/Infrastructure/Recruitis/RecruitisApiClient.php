@@ -42,6 +42,52 @@ class RecruitisApiClient
         return $response->toArray()['payload'] ?? [];
     }
 
+    public function postJobAnswer(
+        int $jobId,
+        string $name,
+        string $email,
+        string $phone,
+        string $linkedin,
+        string $coverLetter,
+        int $salary
+    ): array {
+        $payload = [
+            'job_id' => $jobId,
+            'name' => $name,
+            'email' => $email,
+            'phone' => $phone,
+            'cover_letter' => $coverLetter,
+        ];
+
+        if($linkedin !== '') {
+            $payload['linkedin'] = $linkedin;
+        }
+
+        if ($salary > 0) {
+            $payload['salary'] = [
+                'amount' => $salary,
+                'currency' => 'CZK',
+                'unit' => 'month',
+                'type' => 0,
+                'note' => '',
+            ];
+        }
+
+        $response = $this->httpClient->request(
+            'POST',
+            "https://app.recruitis.io/api2/answers",
+            [
+                'headers' => $this->authHeaders(),
+                'json' => $payload,
+            ]
+        );
+
+        return [
+            'status' => $response->getStatusCode(),
+            'body' => $response->toArray(false),
+        ];
+    }
+
     private function authHeaders(): array
     {
         return [
