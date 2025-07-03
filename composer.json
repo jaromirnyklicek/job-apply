@@ -59,7 +59,9 @@
         "post-update-cmd": [
             "@auto-scripts"
         ],
-        "test": "vendor/bin/codecept run Unit"
+        "test": "vendor/bin/codecept run Unit",
+        "cs:check": "php-cs-fixer fix --dry-run --allow-risky=yes --diff",
+        "cs:fix": "php-cs-fixer fix"
     },
     "conflict": {
         "symfony/symfony": "*"
@@ -72,6 +74,7 @@
     },
     "require-dev": {
         "codeception/codeception": "^5.3",
-        "codeception/module-asserts": "^3.2"
+        "codeception/module-asserts": "^3.2",
+        "friendsofphp/php-cs-fixer": "^3.76"
     }
 }
