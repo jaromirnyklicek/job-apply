@@ -10,17 +10,13 @@ use Twig\TwigFunction;
 
 class ViteAssetExtension extends AbstractExtension
 {
-    private array $manifest;
+    /** @var array<string, array{file: string, css: string[], src: string, isEntry: bool, name: string}> */
+    private array $manifest = [];
+    private string $manifestPath = '';
 
     public function __construct(private KernelInterface $kernel)
     {
-        $manifestPath = $this->kernel->getProjectDir().'/public/build/.vite/manifest.json';
-
-        if (!file_exists($manifestPath)) {
-            throw new \RuntimeException('Vite manifest.json not found at '.$manifestPath);
-        }
-
-        $this->manifest = json_decode(file_get_contents($manifestPath), true, flags: JSON_THROW_ON_ERROR);
+        $this->manifestPath = $this->kernel->getProjectDir().'/public/build/.vite/manifest.json';
     }
 
     public function getFunctions(): array
@@ -33,11 +29,12 @@ class ViteAssetExtension extends AbstractExtension
 
     public function getJsAssetPath(string $entry): string
     {
-        if (!isset($this->manifest[$entry]['file'])) {
+        $manifest = $this->getManifest();
+        if (!isset($manifest[$entry]['file'])) {
             throw new \InvalidArgumentException("Vite entry '$entry' not found in manifest.");
         }
 
-        return '/build/'.$this->manifest[$entry]['file'];
+        return '/build/'.$manifest[$entry]['file'];
     }
 
     /**
@@ -45,13 +42,43 @@ class ViteAssetExtension extends AbstractExtension
      */
     public function getCssAssetPaths(string $entry): array
     {
-        if (!isset($this->manifest[$entry]['css'])) {
+        $manifest = $this->getManifest();
+        if (!isset($manifest[$entry]['css'])) {
             return [];
         }
 
         return array_map(
             fn (string $path) => '/build/'.$path,
-            $this->manifest[$entry]['css']
+            $manifest[$entry]['css']
         );
+    }
+
+    /**
+     * @return array<string, array{file: string, css: string[], src: string, isEntry: bool, name: string}>
+     *
+     * @throws \JsonException
+     */
+    private function getManifest(): array
+    {
+        if (!file_exists($this->manifestPath)) {
+            throw new \RuntimeException('Vite manifest.json not found at '.$this->manifestPath);
+        }
+
+        $json = file_get_contents($this->manifestPath);
+        if (false === $json) {
+            throw new \RuntimeException('Vite manifest.json not readable at '.$this->manifestPath);
+        }
+
+        if ([] === $this->manifest) {
+            /** @var array<string, array{file: string, css: string[], src: string, isEntry: bool, name: string}> $content */
+            $content = json_decode($json, true, flags: JSON_THROW_ON_ERROR);
+            if (is_array($content)) {
+                $this->manifest = $content;
+            } else {
+                throw new \RuntimeException('Vite manifest.json not valid JSON at '.$this->manifestPath);
+            }
+        }
+
+        return $this->manifest;
     }
 }

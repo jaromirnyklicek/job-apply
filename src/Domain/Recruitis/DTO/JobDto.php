@@ -13,6 +13,9 @@ final class JobDto
     ) {
     }
 
+    /**
+     * @param array<string, string|int> $data
+     */
     public static function fromArray(array $data): self
     {
         return new self(
@@ -22,6 +25,9 @@ final class JobDto
         );
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function toArray(): array
     {
         return [

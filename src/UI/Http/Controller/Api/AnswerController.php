@@ -20,7 +20,20 @@ final class AnswerController
     #[Route('/api/answers', name: 'api_answers_submit', methods: ['POST'])]
     public function submit(Request $request): Response
     {
+        /** @var array{
+         *   job_id: string,
+         *   name: string,
+         *   email: string,
+         *   phone: string,
+         *   coverLetter: string,
+         *   linkedin?: string,
+         *   salary?: int|string
+         * } $data
+         */
         $data = json_decode($request->getContent(), true);
+        if (!is_array($data)) {
+            return new JsonResponse(['error' => 'Invalid JSON'], 400);
+        }
 
         $requiredFields = ['job_id', 'name', 'email', 'phone', 'coverLetter'];
         foreach ($requiredFields as $field) {

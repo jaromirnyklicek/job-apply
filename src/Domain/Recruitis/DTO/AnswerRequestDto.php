@@ -17,6 +17,23 @@ final class AnswerRequestDto
     ) {
     }
 
+    /**
+     * @return array{
+     *     job_id: string,
+     *     name: string,
+     *     email: string,
+     *     phone: string,
+     *     cover_letter: string,
+     *     linkedin?: string,
+     *     salary?: array{
+     *          amount: int,
+     *          currency: string,
+     *          unit: string,
+     *          type: int,
+     *          note: string
+     *      }
+     * }
+     */
     public function toArray(): array
     {
         $data = [

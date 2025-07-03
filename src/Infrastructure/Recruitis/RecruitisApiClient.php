@@ -72,6 +72,9 @@ class RecruitisApiClient implements RecruitisApiClientInterface
         ];
     }
 
+    /**
+     * @return array<string, string>
+     */
     private function authHeaders(): array
     {
         return [

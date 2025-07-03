@@ -20,7 +20,7 @@ interface RecruitisApiClientInterface
     public function fetchJobDetail(string $id): JobDto;
 
     /**
-     * @return array raw API response
+     * @return array{status: int, body: array<string, string>} raw API response
      *
      * @throws \RuntimeException
      */

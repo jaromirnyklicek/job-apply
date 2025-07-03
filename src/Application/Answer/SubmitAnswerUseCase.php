@@ -14,6 +14,9 @@ final class SubmitAnswerUseCase
     ) {
     }
 
+    /**
+     * @return array{status: int, body: array<string, string>}
+     */
     public function execute(AnswerRequestDto $dto): array
     {
         return $this->client->postAnswer($dto);

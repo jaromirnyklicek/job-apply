@@ -38,8 +38,8 @@ final class JobController
                 'title' => $job->title,
                 'description' => nl2br($job->description),
             ]);
-        } catch (JobNotFoundException $e) {
-            return new JsonResponse(['error' => 'Job not found'], Response::HTTP_NOT_FOUND);
+        } catch (\RuntimeException $e) {
+            return new JsonResponse(['error' => 'Job not found: '.$e->getMessage()], Response::HTTP_NOT_FOUND);
         }
     }
 }
