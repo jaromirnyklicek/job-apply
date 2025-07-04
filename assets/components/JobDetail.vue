@@ -10,7 +10,13 @@
         <AnswerForm />
     </div>
     <div v-else>
-        <p class="text-danger">Inzerát nebyl nalezen.</p>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1 class="mb-0">Chyba</h1>
+            <router-link to="/" class="btn btn-secondary">Zpět</router-link>
+        </div>
+        <div v-if="error" class="alert alert-danger">
+            <b>Chyba inzerátu:</b> {{ error }}
+        </div>
     </div>
 </template>
 
@@ -21,12 +27,18 @@ import AnswerForm from './AnswerForm.vue'
 
 const route = useRoute()
 const job = ref(null)
+const error = ref(null)
 const loading = ref(true)
 
 onMounted(async () => {
     try {
         const res = await fetch(`/api/jobs/${route.params.id}`)
-        job.value = await res.json()
+        const data = await res.json()
+        if(!res.ok) {
+            error.value = data.error || 'Chyba pri nacitani detailu inzeratu'
+        } else {
+            job.value = data.job
+        }
     } catch (e) {
         console.error('Error loading job detail:', e)
     } finally {

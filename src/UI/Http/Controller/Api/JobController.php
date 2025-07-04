@@ -16,15 +16,19 @@ final class JobController
     #[Route('/api/jobs', name: 'api_jobs_list', methods: ['GET'])]
     public function list(FetchJobsUseCase $useCase): JsonResponse
     {
-        $jobs = $useCase->execute();
+        try {
+            $jobs = $useCase->execute();
 
-        $data = array_map(fn (Job $job) => [
-            'id' => $job->id,
-            'title' => $job->title,
-            'description' => nl2br($job->description),
-        ], $jobs);
+            $data = array_map(fn (Job $job) => [
+                'id' => $job->id,
+                'title' => $job->title,
+                'description' => nl2br($job->description),
+            ], $jobs);
 
-        return new JsonResponse($data);
+            return new JsonResponse(['jobs' => $data]);
+        } catch (\Throwable $e) {
+            return new JsonResponse(['error' => 'Cannot load jobs: '.$e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     #[Route('/api/jobs/{id}', name: 'api_jobs_detail', methods: ['GET'])]
@@ -34,11 +38,13 @@ final class JobController
             $job = $useCase->execute($id);
 
             return new JsonResponse([
-                'id' => $job->id,
-                'title' => $job->title,
-                'description' => nl2br($job->description),
+                'job' => [
+                    'id' => $job->id,
+                    'title' => $job->title,
+                    'description' => nl2br($job->description),
+                ],
             ]);
-        } catch (\RuntimeException $e) {
+        } catch (\Throwable $e) {
             return new JsonResponse(['error' => 'Job not found: '.$e->getMessage()], Response::HTTP_NOT_FOUND);
         }
     }
